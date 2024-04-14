@@ -80,7 +80,7 @@ function getArgumentsCount(...funcs) {
  *
  */
 function getPowerFunction(exponent) {
-  return function (y) {
+  return function f(y) {
     return y ** exponent;
   };
 }
@@ -97,9 +97,20 @@ function getPowerFunction(exponent) {
  *   getPolynom(1,-3)  => y = x - 3
  *   getPolynom(8)     => y = 8
  *   getPolynom()      => null
+ *
+ * getPolynom(2,3,5) => y = 2x^2 + 3x + 5 .
+   getPolynom возвращает функцию с одним аргументом.
+   Эта функция возвращает результат уравнения  2x^2 + 3x + 5, где х аргумент
+   этой функции. 2,3,5 в аргументах функции getPolynom это коэффициенты.
  */
-function getPolynom() {
-  throw new Error('Not implemented');
+function getPolynom(...arg) {
+  return function f(x) {
+    let result = 0;
+    for (let i = 0; i < arg.length; i += 1) {
+      result += arg[i] * x ** (arg.length - 1 - i);
+    }
+    return result;
+  };
 }
 
 /**
@@ -179,8 +190,10 @@ function logger(/* func, logFunc */) {
  *   partialUsingArguments(fn, 'a','b','c')('d') => 'abcd'
  *   partialUsingArguments(fn, 'a','b','c','d')() => 'abcd'
  */
-function partialUsingArguments(/* fn, ...args1 */) {
-  throw new Error('Not implemented');
+function partialUsingArguments(fn, ...args1) {
+  return function f(...args) {
+    return fn(...args1, ...args);
+  };
 }
 
 /**
@@ -200,8 +213,12 @@ function partialUsingArguments(/* fn, ...args1 */) {
  *   getId4() => 7
  *   getId10() => 11
  */
-function getIdGeneratorFunction(/* startFrom */) {
-  throw new Error('Not implemented');
+function getIdGeneratorFunction(startFrom) {
+  let count = -1;
+  return function f() {
+    count += 1;
+    return startFrom + count;
+  };
 }
 
 module.exports = {
